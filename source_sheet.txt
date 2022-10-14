@@ -1,0 +1,65 @@
+A:
+    Type: Step
+    0: 35x50
+    1: 23x50
+    2: 31x50
+    3: 32x50
+    4: 35x50
+    5: 33x50
+    6: 33x50
+    7: 32x50
+    8: 34x50
+    9: 32x50
+    S: 34x36
+    Position: (186,1582),(372,1636)
+    Size: 246x54
+
+
+B:
+    Type: Date
+    0: 19x37
+    1: 13x37
+    2: 18x37
+    3: 18x37
+    4: 
+    5: 18x37
+    6: 
+    7: 
+    8: 19x37
+    9: 
+    M: 35x37
+    D: 31x37
+    Position: (821,1388),(965,1425)
+    Size: 151x37
+
+
+1:
+    Type: Time
+    Count: 6
+    Position: (69,34)
+    Size: 94x28
+
+2:
+    Type: Charge
+    Position: (953,30)
+    Size: 58x36
+
+3:
+    Type: Bar
+    0: None
+    1: Q
+    2: W
+    3: QW
+    Position: (190,29)
+
+4:
+    Type: Likes
+    Position: (901,1603)
+
+5:
+    Type: Cover
+    0: 0
+    1: 14
+    2: 24
+    Position: (313,258),(768,302)
+    Size: 456x45
