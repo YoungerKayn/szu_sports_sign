@@ -9,12 +9,14 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 
+Wordurl = argv[1] if len(argv) > 1 else 5
+
 SportInfo = \
     {
-        "StudentInfo": ["林漾珈","2021280279"],
+        "StudentInfo": ["林漾珈", "2021280279"],
         "QQ": "858425673",
         "password": "null",
-        "WordUrl": argv[1],
+        "WordUrl": Wordurl,
         "picDir": r"D:\Python\test\Pic"
     }
 
@@ -29,10 +31,12 @@ def SummonPic(PicCount: int):
         step = randint(10000, 23333)
         PicStruct = SummonPicStruct(PicDir=PicDir, step=step, date=date)
         ScreenshotPic = PastePic(PicStruct=PicStruct)
+        ScreenshotPic.show()
         ScreenshotPic.save(fp=PicPath, format="png")
+        print(f"Save pic{i+1} to {PicPath}")
 
 
-def SummonPicStruct(PicDir: str, step: int, date: str):
+def SummonPicStruct(PicDir: str, step: int, date: str) -> dict:
     TemplateDir = path.join(PicDir, "template")
     TemplateDirA = path.join(TemplateDir, "A")
     TemplateDirB = path.join(TemplateDir, "B")
@@ -42,7 +46,7 @@ def SummonPicStruct(PicDir: str, step: int, date: str):
     TemplateDir4 = path.join(TemplateDir, "4")
     TemplateDir5 = path.join(TemplateDir, "5")
 
-    StepPic = SummonSetpPic(step=step, PicDirA=TemplateDirA)
+    StepPic = SummonSetpPic(PicDirA=TemplateDirA, step=step)
     DatePic = SummonDatePic(PicDirB=TemplateDirB, date=date)
     TimePic = SummonTimePic(TemplateDir1)
     ChargePic = SummonChargePic(TemplateDir2)
@@ -67,8 +71,8 @@ def SummonPicStruct(PicDir: str, step: int, date: str):
     return PicStruct
 
 
-def SummonSetpPic(step: int, PicDirA: str):
-    assert step > 9999, "Steps out of range"
+def SummonSetpPic(PicDirA: str, step: int):
+    assert step > 9999 and step < 100000, "Steps out of range"
 
     step = str(step)
     BlankPicPath = path.join(PicDirA, "blank.png")
@@ -130,27 +134,6 @@ def SummonDatePic(PicDirB: str, date: str):
     return BlankPic
 
 
-def SummonCoverPic(PicDir5: str):
-    Cover = randint(0, 2)
-    CoverPicPath = path.join(PicDir5, f"{Cover}.png")
-    CoverPic = Image.open(CoverPicPath)
-    return CoverPic
-
-
-def SummonLikesPic(PicDir4: str):
-    Likes = randint(0, 1)
-    LikesPicPath = path.join(PicDir4, f"{Likes}.png")
-    LikesPic = Image.open(LikesPicPath)
-    return LikesPic
-
-
-def SummonBarPic(PicDir3: str):
-    Bar = randint(0, 2)
-    BarPicPath = path.join(PicDir3, f"{Bar}.png")
-    BarPic = Image.open(BarPicPath)
-    return BarPic
-
-
 def SummonTimePic(PicDir1: str):
     Time = randint(0, 5)
     TimePicPath = path.join(PicDir1, f"{Time}.png")
@@ -165,7 +148,28 @@ def SummonChargePic(PicDir2: str):
     return ChargePic
 
 
-def PastePic(PicStruct):
+def SummonBarPic(PicDir3: str):
+    Bar = randint(0, 2)
+    BarPicPath = path.join(PicDir3, f"{Bar}.png")
+    BarPic = Image.open(BarPicPath)
+    return BarPic
+
+
+def SummonLikesPic(PicDir4: str):
+    Likes = randint(0, 1)
+    LikesPicPath = path.join(PicDir4, f"{Likes}.png")
+    LikesPic = Image.open(LikesPicPath)
+    return LikesPic
+
+
+def SummonCoverPic(PicDir5: str):
+    Cover = randint(0, 2)
+    CoverPicPath = path.join(PicDir5, f"{Cover}.png")
+    CoverPic = Image.open(CoverPicPath)
+    return CoverPic
+
+
+def PastePic(PicStruct: dict):
     PositionA = (198, 1582)
     PositionB = (821, 1388)
     Position1 = (69, 34)
@@ -227,11 +231,11 @@ def LoginWord(WordUrl):
         try:
             driver.find_element(by=By.XPATH, value='//*[@alt="图片"]')
             print("Find Pics, wait for updating...")
+            sleep(10)
             break
         except:
             pass
 
-    sleep(10)
     SubmitButton.click()
     sleep(60)
 
