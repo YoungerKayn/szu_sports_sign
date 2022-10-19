@@ -13,8 +13,8 @@ Wordurl = argv[1] if len(argv) > 1 else 5
 
 SportInfo = \
     {
-        "StudentInfo": ["林漾珈", "2021280279"],
-        "QQ": "858425673",
+        "StudentInfo": ["{姓名}", "{学号}"],
+        "QQ": "{QQ}",
         "password": "null",
         "WordUrl": Wordurl,
         "picDir": r"D:\Python\test\Pic"
