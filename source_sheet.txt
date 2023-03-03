@@ -1,3 +1,6 @@
+Total:
+    Size: 1080x2340
+
 A:
     Type: Step
     0: 35x50
@@ -45,7 +48,7 @@ B:
     Size: 58x36
 
 3:
-    Type: Bar
+    Type: Message
     0: None
     1: Q
     2: W
@@ -63,3 +66,28 @@ B:
     2: 24
     Position: (313,258),(768,302)
     Size: 456x45
+
+6:
+    Type: Bar
+    Size: 1080x35
+    Position: (0,0)
+    Elements Positions:
+        Time: (69,34)
+        Message: (190,29)
+        Charge: (953,30)
+
+7:
+    Type: Step 2
+    Position: (186,477)
+    Steps: 402
+
+8:
+    Type: Date 2
+    Position: (66,1108)
+    Steps: 402
+    Size: 25x35
+
+9:
+    Type: Likes 2
+    Position: (901,493)
+    Steps: 402
