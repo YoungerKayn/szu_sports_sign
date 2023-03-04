@@ -20,54 +20,57 @@ SportInfo = \
         "picDir": r"D:\Python\test\Pic"
     }
 
-PicDir = SportInfo["picDir"]
-TemplateDir = path.join(PicDir, "template")
-TemplateDirA = path.join(TemplateDir, "A")
-TemplateDirB = path.join(TemplateDir, "B")
-TemplateDir1 = path.join(TemplateDir, "1")
-TemplateDir2 = path.join(TemplateDir, "2")
-TemplateDir3 = path.join(TemplateDir, "3")
-TemplateDir4 = path.join(TemplateDir, "4")
-TemplateDir5 = path.join(TemplateDir, "5")
-TemplateDir8 = path.join(TemplateDir, "8")
-ResultDir = path.join(r"C:\Users\Administrator\桌面")
+Dir = \
+    {
+        "PicDir": SportInfo["picDir"],
+        "TemplateDir": path.join(SportInfo["picDir"], "template"),
+        "TemplateDirA": path.join(SportInfo["picDir"], "template", "A"),
+        "TemplateDirB": path.join(SportInfo["picDir"], "template", "B"),
+        "TemplateDir1": path.join(SportInfo["picDir"], "template", "1"),
+        "TemplateDir2": path.join(SportInfo["picDir"], "template", "2"),
+        "TemplateDir3": path.join(SportInfo["picDir"], "template", "3"),
+        "TemplateDir4": path.join(SportInfo["picDir"], "template", "4"),
+        "TemplateDir5": path.join(SportInfo["picDir"], "template", "5"),
+        "TemplateDir8": path.join(SportInfo["picDir"], "template", "8"),
+        "ResultDir": r"C:\Users\Administrator\桌面"
+    }
 
 
 def SummonPic():
-    TemplateDir = path.join(PicDir, "template")
+    TemplateDir = Dir["TemplateDir"]
     ScreenshotBlankPic2Path = path.join(TemplateDir, "blank2.png")
     ScreenshotPic2 = Image.open(ScreenshotBlankPic2Path)
     for i in range(5):
-        date = datetime.strftime((datetime.now()-timedelta(days=i+1)), "%m-%d")
+        date = datetime.strftime((datetime.now()-timedelta(days=i)), "%m-%d")
         step = randint(10000, 23333)
-        PicStruct = SummonPicStruct(PicDir=PicDir, step=step, date=date)
+        PicStruct = SummonPicStruct(step=step, date=date)
         if i == 0:
             ScreenshotPic1 = PastePic1(PicStruct=PicStruct)
             ResultPath1 = path.join(
-                ResultDir, f"{datetime.strftime(datetime.now(), '%Y%m%d%H%M%S')}1.png")
+                Dir["ResultDir"], f"{datetime.strftime(datetime.now(), '%Y%m%d%H%M%S')}1.png")
             # ScreenshotPic1.show()
             ScreenshotPic1.save(fp=ResultPath1, format="png")
         ScreenshotPic2 = PastePic2(
             ScreenshotPic2, PicStruct=PicStruct, Cursor=i)
 
     ResultPath2 = path.join(
-            ResultDir,f"{datetime.strftime(datetime.now(), '%Y%m%d%H%M%S')}2.png")
+        Dir["ResultDir"], f"{datetime.strftime(datetime.now(), '%Y%m%d%H%M%S')}2.png")
     # ScreenshotPic2.show()
     ScreenshotPic2.save(fp=ResultPath2, format="png")
-    print(f"Save pics to {ResultDir}")
+    print(f"Save pics to {Dir['ResultDir']}")
 
 
-def SummonPicStruct(PicDir: str, step: int, date: str) -> dict:
-    StepPic = SummonStepPic(PicDirA=TemplateDirA, step=step)
-    DatePic = SummonDatePic(PicDirB=TemplateDirB, date=date)
-    TimePic = SummonTimePic(TemplateDir1)
-    ChargePic = SummonChargePic(TemplateDir2)
-    MessagePic = SummonMessagePic(TemplateDir3)
-    LikesPic = SummonLikesPic(TemplateDir4)
-    CoverPic = SummonCoverPic(TemplateDir5)
+def SummonPicStruct(step: int, date: str) -> dict:
+    StepPic = SummonStepPic(PicDirA=Dir["TemplateDirA"], step=step)
+    DatePic = SummonDatePic(PicDirB=Dir["TemplateDirB"], date=date)
+    TimePic = SummonTimePic(Dir["TemplateDir1"])
+    ChargePic = SummonChargePic(Dir["TemplateDir2"])
+    MessagePic = SummonMessagePic(Dir["TemplateDir3"])
+    LikesPic = SummonLikesPic(Dir["TemplateDir4"])
+    CoverPic = SummonCoverPic(Dir["TemplateDir5"])
 
-    ScreenshotBlankPicPath = path.join(TemplateDir, "blank.png")
-    ScreenshotBlankPic2Path = path.join(TemplateDir, "blank2.png")
+    ScreenshotBlankPicPath = path.join(Dir["TemplateDir"], "blank.png")
+    ScreenshotBlankPic2Path = path.join(Dir["TemplateDir"], "blank2.png")
     ScreenshotBlankPic = Image.open(ScreenshotBlankPicPath)
     ScreenshotBlankPic2 = Image.open(ScreenshotBlankPic2Path)
 
@@ -163,8 +166,6 @@ def SummonDatePic2(PicDir8: str, date: str):
     MonthPic = Image.open(MonthPicPath)
     DayPicPaht = path.join(PicDir8, "D.png")
     DayPic = Image.open(DayPicPaht)
-
-    SizeB = [19, 13, 18, 18, 19, 18, 19, 19, 19, 19]
     SizeStrMonth = 36
     XCursor = 0
 
@@ -193,8 +194,29 @@ def SummonDatePic2(PicDir8: str, date: str):
 
 
 def SummonTimePic(PicDir1: str):
-    # Bar
-    Time = randint(0, 5)
+    # 如果现在时间是13：18到18：03，采用0.png
+    # 如果现在时间是18：03到20：01，采用1.png
+    # 如果现在时间是20：01到22：47，采用2.png
+    # 如果现在时间是22：47到23：59，采用3.png
+    # 都不满足则采用3.png
+
+    # 当前时间
+    Time = datetime.now().strftime("%H:%M")
+    # 13：18到18：03
+    if Time >= "13:18" and Time <= "18:03":
+        Time = 0
+    # 18：03到20：01
+    elif Time >= "18:03" and Time <= "20:01":
+        Time = 1
+    # 20：01到22：47
+    elif Time >= "20:01" and Time <= "22:47":
+        Time = 2
+    # 22：47到23：59
+    elif Time >= "22:47" and Time <= "23:59":
+        Time = 3
+    # 其他情况
+    else:
+        Time = 3
     TimePicPath = path.join(PicDir1, f"{Time}.png")
     TimePic = Image.open(TimePicPath)
     return TimePic
@@ -277,7 +299,7 @@ def PastePic2(ScreenshotPic2, PicStruct: dict, Cursor: int):
         ScreenshotPic2.paste(im=PicStruct["BarPic"], box=Position6)
     ScreenshotPic2.paste(im=PicStruct["StepPic"], box=Position7)
     if Cursor > 1:
-        DatePic2 = SummonDatePic2(TemplateDir8, datetime.strftime(
+        DatePic2 = SummonDatePic2(Dir["TemplateDir8"], datetime.strftime(
             (datetime.now()-timedelta(days=Cursor)), "%m-%d"))
         ScreenshotPic2.paste(im=DatePic2, box=Position8)
     ScreenshotPic2.paste(im=PicStruct["LikesPic"], box=Position9)
