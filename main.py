@@ -36,25 +36,26 @@ Dir = \
     }
 
 
-def SummonPic():
+def SummonPic(dateOffset: int = 0):
     TemplateDir = Dir["TemplateDir"]
     ScreenshotBlankPic2Path = path.join(TemplateDir, "blank2.png")
     ScreenshotPic2 = Image.open(ScreenshotBlankPic2Path)
     for i in range(5):
-        date = datetime.strftime((datetime.now()-timedelta(days=i)), "%m-%d")
+        date = datetime.strftime(
+            (datetime.now()-timedelta(days=i+dateOffset)), "%m-%d")
         step = randint(10000, 23333)
         PicStruct = SummonPicStruct(step=step, date=date)
-        if i == 0:
+        if i == 0:  # 生成当天的主页
             ScreenshotPic1 = PastePic1(PicStruct=PicStruct)
             ResultPath1 = path.join(
-                Dir["ResultDir"], f"{datetime.strftime(datetime.now(), '%Y%m%d%H%M%S')}1.png")
+                Dir["ResultDir"], f"{datetime.strftime(datetime.now()-timedelta(days=dateOffset), '%Y%m%d%H%M%S')}1.png")
             # ScreenshotPic1.show()
             ScreenshotPic1.save(fp=ResultPath1, format="png")
         ScreenshotPic2 = PastePic2(
-            ScreenshotPic2, PicStruct=PicStruct, Cursor=i)
+            ScreenshotPic2, PicStruct=PicStruct, Cursor=i, dateOffset=dateOffset)
 
     ResultPath2 = path.join(
-        Dir["ResultDir"], f"{datetime.strftime(datetime.now(), '%Y%m%d%H%M%S')}2.png")
+        Dir["ResultDir"], f"{datetime.strftime(datetime.now()-timedelta(days=dateOffset), '%Y%m%d%H%M%S')}2.png")
     # ScreenshotPic2.show()
     ScreenshotPic2.save(fp=ResultPath2, format="png")
     print(f"Save pics to {Dir['ResultDir']}")
@@ -290,7 +291,7 @@ def PastePic1(PicStruct: dict):
     return ScreenshotBlankPic
 
 
-def PastePic2(ScreenshotPic2, PicStruct: dict, Cursor: int):
+def PastePic2(ScreenshotPic2, PicStruct: dict, Cursor: int, dateOffset: int):
     Position6 = (0, 0)
     Position7 = (186, 477 + 402 * Cursor)
     Position8 = (66, 1108 + 402 * (Cursor-2))
@@ -300,7 +301,7 @@ def PastePic2(ScreenshotPic2, PicStruct: dict, Cursor: int):
     ScreenshotPic2.paste(im=PicStruct["StepPic"], box=Position7)
     if Cursor > 1:
         DatePic2 = SummonDatePic2(Dir["TemplateDir8"], datetime.strftime(
-            (datetime.now()-timedelta(days=Cursor)), "%m-%d"))
+            (datetime.now()-timedelta(days=Cursor+dateOffset)), "%m-%d"))
         ScreenshotPic2.paste(im=DatePic2, box=Position8)
     ScreenshotPic2.paste(im=PicStruct["LikesPic"], box=Position9)
     return ScreenshotPic2
@@ -359,7 +360,8 @@ def LoginWord(WordUrl):
 
 
 def main():
-    SummonPic()
+    dateOffset = int(input("data offset: "))
+    SummonPic(dateOffset=dateOffset)
     # LoginWord(WordUrl=SportInfo["WordUrl"])
 
 
