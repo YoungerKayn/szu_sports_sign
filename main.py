@@ -42,20 +42,26 @@ def SummonPic(dateOffset: int = 0):
     ScreenshotPic2 = Image.open(ScreenshotBlankPic2Path)
     for i in range(5):
         date = datetime.strftime(
-            (datetime.now()-timedelta(days=i+dateOffset)), "%m-%d")
+            (datetime.now() - timedelta(days=i + dateOffset)), "%m-%d")
         step = randint(10000, 23333)
         PicStruct = SummonPicStruct(step=step, date=date)
         if i == 0:  # 生成当天的主页
             ScreenshotPic1 = PastePic1(PicStruct=PicStruct)
             ResultPath1 = path.join(
-                Dir["ResultDir"], f"{datetime.strftime(datetime.now()-timedelta(days=dateOffset), '%Y%m%d%H%M%S')}1.png")
+                Dir["ResultDir"],
+                f"{datetime.strftime(datetime.now()-timedelta(days=dateOffset), '%Y%m%d%H%M%S')}1.png"
+            )
             # ScreenshotPic1.show()
             ScreenshotPic1.save(fp=ResultPath1, format="png")
-        ScreenshotPic2 = PastePic2(
-            ScreenshotPic2, PicStruct=PicStruct, Cursor=i, dateOffset=dateOffset)
+        ScreenshotPic2 = PastePic2(ScreenshotPic2,
+                                   PicStruct=PicStruct,
+                                   Cursor=i,
+                                   dateOffset=dateOffset)
 
     ResultPath2 = path.join(
-        Dir["ResultDir"], f"{datetime.strftime(datetime.now()-timedelta(days=dateOffset), '%Y%m%d%H%M%S')}2.png")
+        Dir["ResultDir"],
+        f"{datetime.strftime(datetime.now()-timedelta(days=dateOffset), '%Y%m%d%H%M%S')}2.png"
+    )
     # ScreenshotPic2.show()
     ScreenshotPic2.save(fp=ResultPath2, format="png")
     print(f"Save pics to {Dir['ResultDir']}")
@@ -111,7 +117,7 @@ def SummonStepPic(PicDirA: str, step: int):
         ToPastePicPath = path.join(PicDirA, f"{StepVar}.png")
         ToPastePic = Image.open(ToPastePicPath)
         BlankPic.paste(im=ToPastePic, box=(XCursor, 0))
-        XCursor += SizeA[int(StepVar)]+4
+        XCursor += SizeA[int(StepVar)] + 4
 
     XCursor += SizeStr
     BlankPic.paste(im=StrPic, box=(XCursor, 0))
@@ -140,17 +146,17 @@ def SummonDatePic(PicDirB: str, date: str):
         ToPastePicPath = path.join(PicDirB, f"{MonthVar}.png")
         ToPastePic = Image.open(ToPastePicPath)
         BlankPic.paste(im=ToPastePic, box=(XCursor, 0))
-        XCursor += SizeB[int(MonthVar)]+3
+        XCursor += SizeB[int(MonthVar)] + 3
 
     BlankPic.paste(im=MonthPic, box=(XCursor, 0))
-    XCursor += SizeStrMonth+3
+    XCursor += SizeStrMonth + 3
 
     for i in range(len(day)):
         DayVar = day[i]
         ToPastePicPath = path.join(PicDirB, f"{DayVar}.png")
         ToPastePic = Image.open(ToPastePicPath)
         BlankPic.paste(im=ToPastePic, box=(XCursor, 0))
-        XCursor += SizeB[int(DayVar)]+3
+        XCursor += SizeB[int(DayVar)] + 3
 
     BlankPic.paste(im=DayPic, box=(XCursor, 0))
     return BlankPic
@@ -176,18 +182,18 @@ def SummonDatePic2(PicDir8: str, date: str):
         ToPastePicPath = path.join(PicDir8, f"{MonthVar}.png")
         ToPastePic = Image.open(ToPastePicPath)
         BlankPic.paste(im=ToPastePic, box=(XCursor, 3))
-        XCursor += 20+3
+        XCursor += 20 + 3
 
     XCursor += 5
     BlankPic.paste(im=MonthPic, box=(XCursor, 0))
-    XCursor += SizeStrMonth+10
+    XCursor += SizeStrMonth + 10
 
     for i in range(len(day)):
         DayVar = day[i]
         ToPastePicPath = path.join(PicDir8, f"{DayVar}.png")
         ToPastePic = Image.open(ToPastePicPath)
         BlankPic.paste(im=ToPastePic, box=(XCursor, 3))
-        XCursor += 20+3
+        XCursor += 20 + 3
 
     XCursor += 8
     BlankPic.paste(im=DayPic, box=(XCursor, 1))
@@ -294,14 +300,17 @@ def PastePic1(PicStruct: dict):
 def PastePic2(ScreenshotPic2, PicStruct: dict, Cursor: int, dateOffset: int):
     Position6 = (0, 0)
     Position7 = (186, 477 + 402 * Cursor)
-    Position8 = (66, 1108 + 402 * (Cursor-2))
+    Position8 = (66, 1108 + 402 * (Cursor - 2))
     Position9 = (901, 493 + 402 * Cursor)
     if Cursor == 0:
         ScreenshotPic2.paste(im=PicStruct["BarPic"], box=Position6)
     ScreenshotPic2.paste(im=PicStruct["StepPic"], box=Position7)
     if Cursor > 1:
-        DatePic2 = SummonDatePic2(Dir["TemplateDir8"], datetime.strftime(
-            (datetime.now()-timedelta(days=Cursor+dateOffset)), "%m-%d"))
+        DatePic2 = SummonDatePic2(
+            Dir["TemplateDir8"],
+            datetime.strftime(
+                (datetime.now() - timedelta(days=Cursor + dateOffset)),
+                "%m-%d"))
         ScreenshotPic2.paste(im=DatePic2, box=Position8)
     ScreenshotPic2.paste(im=PicStruct["LikesPic"], box=Position9)
     return ScreenshotPic2
@@ -313,21 +322,20 @@ def LoginWord(WordUrl):
     StudentInfo = SportInfo["StudentInfo"]
 
     # 登录
-    driver = webdriver.Chrome(service=Service(
-        r"D:\Python\ChromeDriver\chromedriver.exe"))
+    driver = webdriver.Chrome(
+        service=Service(r"D:\Python\ChromeDriver\chromedriver.exe"))
     driver.get(WordUrl)
     sleep(2)
-    driver.find_element(
-        by=By.CLASS_NAME, value='login-button').click()
+    driver.find_element(by=By.CLASS_NAME, value='login-button').click()
     sleep(2)
     driver.find_element(by=By.ID, value="qq-tabs-title").click()  # 切换QQ登录
     driver.switch_to.frame("login_frame")
     try:
-        driver.find_element(
-            by=By.ID, value=f"img_out_{account}").click()  # 尝试快捷登录
+        driver.find_element(by=By.ID,
+                            value=f"img_out_{account}").click()  # 尝试快捷登录
     except:
-        driver.find_element(
-            by=By.ID, value="switcher_plogin").click()  # 切换手动登录
+        driver.find_element(by=By.ID,
+                            value="switcher_plogin").click()  # 切换手动登录
         sleep(2)
         driver.find_element(By.ID, value="u").send_keys(account)
         driver.find_element(By.ID, value="p").send_keys(password)
@@ -337,13 +345,12 @@ def LoginWord(WordUrl):
     driver.switch_to.parent_frame()
 
     # 填写信息
-    InputArea = driver.find_elements(
-        by=By.CSS_SELECTOR, value="textarea")
+    InputArea = driver.find_elements(by=By.CSS_SELECTOR, value="textarea")
     for i in range(len(InputArea)):
         InputArea[i].send_keys(StudentInfo[i])
 
-    SubmitButton = driver.find_element(
-        by=By.XPATH, value='//*[@type="button"]')
+    SubmitButton = driver.find_element(by=By.XPATH,
+                                       value='//*[@type="button"]')
     print(SubmitButton)
 
     while (1):
@@ -360,7 +367,13 @@ def LoginWord(WordUrl):
 
 
 def main():
-    dateOffset = int(input("data offset: "))
+    if len(argv) > 1:
+        dateOffset = argv[1]
+        Dir["ResultDir"] = argv[2]
+    else:
+        dateOffset = 0
+        Dir["ResultDir"] = r"C:\Users\Administrator\桌面"
+    dateOffset = int(dateOffset)
     SummonPic(dateOffset=dateOffset)
     # LoginWord(WordUrl=SportInfo["WordUrl"])
 
