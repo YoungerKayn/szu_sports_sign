@@ -367,7 +367,9 @@ def LoginWord(WordUrl):
 
 
 def main():
-    if len(argv) > 1:
+    if len(argv) == 2:
+        dateOffset = argv[1]
+    elif len(argv) == 3:
         dateOffset = argv[1]
         Dir["ResultDir"] = argv[2]
     else:
